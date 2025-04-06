@@ -4,6 +4,7 @@ from simple_PINN.settings import (
     t_initial, x_initial, u_initial, v_initial, 
     t_boundary, x_boundary, u_boundary,
     t_region, x_region, 
+    TARGET_DIR
 )
 
 def sampling_points():
@@ -15,7 +16,14 @@ def sampling_points():
     plt.scatter(t_boundary, x_boundary, c=u_boundary)
     plt.colorbar()
     plt.scatter(t_region, x_region, c="gray", s=5, marker="x")
-    plt.show()
+
+    plt.title('Sampling Points')
+    plt.xlabel(r'$t$')
+    plt.ylabel(r'$x$')
+
+    path = TARGET_DIR + "sampling_points.pdf"
+    plt.savefig(path, bbox_inches='tight')  # 画像保存
+    #plt.show()
 
 def initial_conditions():
     """
@@ -23,7 +31,14 @@ def initial_conditions():
     """
     plt.figure(figsize=(3, 2))
     plt.scatter(x_initial, u_initial) # 初期条件
-    plt.show()
+
+    plt.title('Initial Condition')
+    plt.xlabel(r'$t$')
+    plt.ylabel(r'$x$')
+
+    path = TARGET_DIR + "initial_conditions.pdf"
+    plt.savefig(path, bbox_inches='tight')  # 画像保存
+    #plt.show()
 
 def loss(history):
     """
@@ -46,7 +61,9 @@ def loss(history):
     plt.legend()
 
     # 図を表示
-    plt.show()
+    path = TARGET_DIR + "loss_history.pdf"
+    plt.savefig(path, bbox_inches='tight')  # 画像保存
+    #plt.show()
 
 def prediction(t_pred, x_pred, u_pred):
     """
@@ -55,7 +72,14 @@ def prediction(t_pred, x_pred, u_pred):
     plt.figure(figsize=(10, 2))
     plt.contourf(t_pred, x_pred, u_pred, 32)
     plt.colorbar()
-    plt.show()
+
+    plt.xlabel(r'$t$')
+    plt.ylabel(r'$x$')
+    plt.title(r'predicted $u(t, x)$')
+
+    path = TARGET_DIR + "prediction.pdf"
+    plt.savefig(path, bbox_inches='tight')  # 画像保存
+    #plt.show()
 
 def residual(t_pred, x_pred, f_pred):
     """
@@ -64,7 +88,14 @@ def residual(t_pred, x_pred, f_pred):
     plt.figure(figsize=(10, 2))
     plt.contourf(t_pred, x_pred, f_pred, 32)
     plt.colorbar()
-    plt.show()
+
+    plt.xlabel(r'$t$')
+    plt.ylabel(r'$x$')
+    plt.title(r'residual $f(t, x)$')
+
+    path = TARGET_DIR + "residual.pdf"
+    plt.savefig(path, bbox_inches='tight')  # 画像保存
+    #plt.show()
 
 def time_evolution(pinn_model, x_pred):
     """
@@ -83,5 +114,9 @@ def time_evolution(pinn_model, x_pred):
         plt.plot(x_pred, f_pred, label='f_pred')
         plt.ylim(-1.5, 1.5)
         plt.legend()
-    plt.show()
+
+    path = TARGET_DIR + "time_evolution.pdf"
+    plt.savefig(path, bbox_inches='tight')  # 画像保存
+
+    #plt.show()
 
