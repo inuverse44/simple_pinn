@@ -5,7 +5,7 @@ from simple_PINN.settings import (
     MAX_EPOCHS_FOR_FITTING,
     LEARNING_RATE, 
     PI_WEIGHT,
-    NU, 
+    VELOCITY, 
     EPOCH_SEPARATOR
 )
 
@@ -17,7 +17,7 @@ class PINN():
         @param NU: 粘性係数
         """
         self.model = model
-        self.nu = NU
+        self.velocity = VELOCITY
         
         
     def net_u(self, x, t):
@@ -42,8 +42,8 @@ class PINN():
         du_dxx = torch.autograd.grad(du_dx, x, grad_outputs=torch.ones_like(du_dx), retain_graph=True, create_graph=True)[0]
         
         # 支配方程式に代入(f=0だと方程式と完全一致)
-        # f = du_dt + u * du_dx - self.nu * du_dxx 
-        f = du_dtt - du_dxx
+        coefficient = self.velocity**2
+        f = du_dtt / coefficient - du_dxx
         
         return f
     
