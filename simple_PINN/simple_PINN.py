@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from simple_PINN.NN import NN
 from simple_PINN.PINN import PINN
@@ -6,6 +7,7 @@ from simple_PINN.settings import (
     t_initial, x_initial, u_initial, v_initial, 
     t_boundary, x_boundary, u_boundary,
     t_region, x_region, 
+    TARGET_DIR
 )
 from simple_PINN.settings import MAX_EPOCHS_FOR_MODEL
 from simple_PINN import visualize
@@ -14,6 +16,8 @@ def main_PINN():
     ###############
     # 問題設定
     ###############
+    # パスの設定
+    os.makedirs(TARGET_DIR, exist_ok=True)
 
     # 乱数のシードを固定
     torch_fix_seed()
