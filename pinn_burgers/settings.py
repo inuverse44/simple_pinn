@@ -1,33 +1,29 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-# 1次元のBurgers方程式
-# 初期条件: x∈[-1,1], t=0のとき，u=-sin(x)
+# --- 初期条件 ---
 n_initial = 100
-t_initial = np.zeros(n_initial) # t=[0, 0, ..., 0]
-x_initial = (np.random.random(n_initial) - 0.5) * 2 #np.random.random()は[0, 1)の乱数を生成
-u_initial = -1 * np.sin(np.pi * x_initial)
+t_initial = np.zeros(n_initial)  # t = 0
+x_initial = np.linspace(-1, 1, n_initial)
+u_initial = np.sin(np.pi * x_initial) # 変位 u(x, 0) = sin(pi * x)
+v_initial = np.zeros_like(x_initial) # 速度 ∂u/∂t(x, 0) = 0（静止）
 
-# 固定壁条件: x=-1 or x=1, t∈[0,1]のとき，u=0
+# --- 境界条件 ---
 n_boundary = 100
-t_boundary = np.random.random(n_boundary)
+t_boundary = np.random.rand(n_boundary)
 x_boundary = np.random.choice([-1, 1], n_boundary)
 u_boundary = np.zeros(n_boundary)
 
-# 支配方程式の残差を評価する計算領域内の座標: x∈[-1,1], t∈[0,1]
+# --- 計算領域内の点 ---
 n_region = 5000
-t_region = np.random.random(n_region)
-x_region = (np.random.random(n_region)- 0.5) * 2
+t_region = np.random.rand(n_region)
+x_region = np.random.uniform(-1, 1, n_region)
 
-# 最大エポック数
-MAX_EPOCHS_FOR_MODEL = 1000
-MAX_EPOCHS_FOR_FITTING = 300
-
-# 学習率
-LEARNING_RATE = 0.01
-
-# pi項の重み
+# --- HYPER PARAMETERS ---
+MAX_EPOCHS_FOR_MODEL = 4000
+MAX_EPOCHS_FOR_FITTING = 1000
+LEARNING_RATE = 0.001
 PI_WEIGHT = 5e-4
+NU = 0.1  # 波動方程式では使わないけど削除不要
 
-# モデルパラメータ
-NU = 0.1
+# --- その他の設定 ---
+EPOCH_SEPARATOR = 10
