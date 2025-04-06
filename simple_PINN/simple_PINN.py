@@ -1,13 +1,13 @@
 import numpy as np
 from simple_PINN.NN import NN
 from simple_PINN.PINN import PINN
-from simple_PINN.preprocesses import torch_fix_seed
-from simple_PINN.settings import (
+from simple_PINN.preprocesses import (
+    torch_fix_seed, 
     t_initial, x_initial, u_initial, v_initial, 
     t_boundary, x_boundary, u_boundary,
     t_region, x_region, 
-    MAX_EPOCHS_FOR_MODEL
 )
+from simple_PINN.settings import MAX_EPOCHS_FOR_MODEL
 from simple_PINN import visualize
 
 def main_PINN():
@@ -48,7 +48,7 @@ def main_PINN():
 
 
     ###############
-    # 可視化
+    # 図示
     ###############
     # サンプリングした点を可視化
     visualize.sampling_points()
