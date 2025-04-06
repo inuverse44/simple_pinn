@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from pinn_burgers.settings import (
+from simple_PINN.settings import (
     t_initial, x_initial, u_initial, v_initial, 
     t_boundary, x_boundary, u_boundary,
     t_region, x_region, 

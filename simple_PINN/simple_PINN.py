@@ -1,16 +1,14 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from pinn_burgers.NN import NN
-from pinn_burgers.burgers_nn import BurgersPINN
-from pinn_burgers.preprocesses import torch_fix_seed
-from pinn_burgers.settings import (
+from simple_PINN.NN import NN
+from simple_PINN.PINN import PINN
+from simple_PINN.preprocesses import torch_fix_seed
+from simple_PINN.settings import (
     t_initial, x_initial, u_initial, v_initial, 
     t_boundary, x_boundary, u_boundary,
     t_region, x_region, 
     MAX_EPOCHS_FOR_MODEL
 )
-from pinn_burgers import visualize
-
+from simple_PINN import visualize
 
 def main_PINN():
     ###############
@@ -27,12 +25,11 @@ def main_PINN():
     V_ic = v_initial.reshape(-1, 1) # 初期条件の速度(t=0)
     X_region = np.block([[t_region], [x_region]]).T 
 
-
     ###############
     # 学習
     ###############
     model = NN(2, 1)
-    pinn_model = BurgersPINN(model)
+    pinn_model = PINN(model)
 
     # モデルを学習
     history = pinn_model.fit(X_bc, Y_bc, X_region, v_ic=V_ic, max_epochs=MAX_EPOCHS_FOR_MODEL)

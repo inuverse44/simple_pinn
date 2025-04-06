@@ -19,7 +19,7 @@ t_region = np.random.rand(n_region)
 x_region = np.random.uniform(-1, 1, n_region)
 
 # --- HYPER PARAMETERS ---
-MAX_EPOCHS_FOR_MODEL = 4000
+MAX_EPOCHS_FOR_MODEL = 100
 MAX_EPOCHS_FOR_FITTING = 1000
 LEARNING_RATE = 0.001
 PI_WEIGHT = 5e-4

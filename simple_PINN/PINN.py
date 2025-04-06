@@ -1,7 +1,7 @@
 
 import numpy as np
 import torch
-from pinn_burgers.settings import (
+from simple_PINN.settings import (
     MAX_EPOCHS_FOR_FITTING,
     LEARNING_RATE, 
     PI_WEIGHT,
@@ -9,7 +9,7 @@ from pinn_burgers.settings import (
     EPOCH_SEPARATOR
 )
 
-class BurgersPINN():
+class PINN():
     def __init__(self, model):
         """
         PINNモデルの初期化
