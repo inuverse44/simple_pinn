@@ -1,7 +1,7 @@
 import os
 import numpy as np
-from simple_PINN.NN import NN
-from simple_PINN.PINN import PINN
+from simple_PINN.training.NN import NN
+from simple_PINN.training.PINN import PINN
 from simple_PINN.preprocesses import torch_fix_seed
 from simple_PINN.settings import ( 
     t_initial, x_initial, u_initial, v_initial, 
@@ -10,7 +10,8 @@ from simple_PINN.settings import (
     TARGET_DIR
 )
 from simple_PINN.settings import MAX_EPOCHS_FOR_MODEL
-from simple_PINN import visualize
+from simple_PINN.postprocesses import visualize
+from simple_PINN.postprocesses import save_data
 
 def main_PINN():
     ###############
@@ -52,17 +53,13 @@ def main_PINN():
 
 
     ###############
+    # データの保存
+    ###############
+    save_data.save_data(t_grid, x_grid, u_pred, f_pred, history)
+
+    ###############
     # 図示
     ###############
-    # サンプリングした点を可視化
-    visualize.sampling_points()
-    # 初期条件を可視化
-    visualize.initial_conditions()
-    # lossのh履歴を可視化
-    visualize.loss(history)
-    # 物理量を可視化
-    visualize.prediction(t_pred, x_pred, u_pred)
-    # 基礎方程式の残差を可視化
-    visualize.residual(t_pred, x_pred, f_pred)
-    # 物理量の時間変化を可視化
-    visualize.time_evolution(pinn_model, x_pred)
+    visualize.plot_figures(pinn_model, history, t_pred, x_pred, u_pred, f_pred)
+
+  

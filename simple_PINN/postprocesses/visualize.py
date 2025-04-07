@@ -120,3 +120,21 @@ def time_evolution(pinn_model, x_pred):
 
     #plt.show()
 
+
+
+def plot_figures(pinn_model, history, t_pred, x_pred, u_pred, f_pred):
+    """
+    すべての図を描画
+    """
+    # サンプリングした点を可視化
+    sampling_points()
+    # 初期条件を可視化
+    initial_conditions()
+    # lossのh履歴を可視化
+    loss(history)
+    # 物理量を可視化
+    prediction(t_pred, x_pred, u_pred)
+    # 基礎方程式の残差を可視化
+    residual(t_pred, x_pred, f_pred)
+    # 物理量の時間変化を可視化
+    time_evolution(pinn_model, x_pred)
