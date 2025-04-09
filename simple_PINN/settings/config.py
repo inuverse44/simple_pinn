@@ -1,34 +1,41 @@
 import numpy as np
 
-# --- 初期条件 ---
-N_INITIAL = 100
-t_initial = np.zeros(N_INITIAL)  # t = 0
-x_initial = np.linspace(-1, 1, N_INITIAL)
-u_initial = np.sin(np.pi * x_initial) # 変位 u(x, 0) = sin(pi * x)
-v_initial = np.zeros_like(x_initial) # 速度 ∂u/∂t(x, 0) = 0（静止）
+# グローバルな設定辞書（apply_configで更新）
+_config = {}
 
-N_BOUNDARY = 100
-t_boundary = np.random.rand(N_BOUNDARY)
-x_boundary = np.random.choice([-1, 1], N_BOUNDARY)
-u_boundary = np.zeros(N_BOUNDARY) # 固定端
+# --- 設定適用用関数 ---
+def apply_config(cfg):
+    """
+    config.yaml から読み込んだ設定を反映する
+    """
+    global _config
+    _config = cfg.copy()
 
-N_REGION = 5000
-t_region = np.random.rand(N_REGION)
-x_region = np.random.uniform(-1, 1, N_REGION)
+    # 初期・境界・内部点などのデータもここで生成
+    _config['t_initial'] = np.zeros(cfg['N_INITIAL'])
+    _config['x_initial'] = np.linspace(-1, 1, cfg['N_INITIAL'])
+    _config['u_initial'] = np.sin(np.pi * _config['x_initial'])
+    _config['v_initial'] = np.zeros_like(_config['x_initial'])
+
+    _config['t_boundary'] = np.random.rand(cfg['N_BOUNDARY'])
+    _config['x_boundary'] = np.random.choice([-1, 1], cfg['N_BOUNDARY'])
+    _config['u_boundary'] = np.zeros(cfg['N_BOUNDARY'])
+
+    _config['t_region'] = np.random.rand(cfg['N_REGION'])
+    _config['x_region'] = np.random.uniform(-1, 1, cfg['N_REGION'])
+
+    _config['OUTPUT_DIR'] = "output/"
+    _config['TARGET_DIR'] = _config['OUTPUT_DIR'] + \
+        f"init={cfg['N_INITIAL']}_boun={cfg['N_BOUNDARY']}_regi={cfg['N_REGION']}_maxep={cfg['MAX_EPOCHS_FOR_MODEL']}_lr={cfg['LEARNING_RATE']}_w={cfg['PI_WEIGHT']}_v={cfg['VELOCITY']}/"
+    _config['LOG_PATH'] = _config['TARGET_DIR'] + "log.txt"
 
 
-# --- HYPER PARAMETERS ---
-MAX_EPOCHS_FOR_MODEL = 1000
-MAX_EPOCHS_FOR_FITTING = 1000
-LEARNING_RATE = 0.01
-PI_WEIGHT = 1e-1
-VELOCITY = 1
+# --- Getter 関数群 ---
+def get(key):
+    return _config[key]
 
-# --- その他の設定 ---
-EPOCH_SEPARATOR = 10
+def get_target_dir():
+    return _config['TARGET_DIR']
 
-# --- outputディレクトリパス ---
-OUTPUT_DIR = "output/"
-TARGET_DIR = OUTPUT_DIR + \
-      f"init={N_INITIAL}_boun={N_BOUNDARY}_regi={N_REGION}_maxep={MAX_EPOCHS_FOR_MODEL}_lr={LEARNING_RATE}_w={PI_WEIGHT}_v={VELOCITY}/"
-LOG_PATH = TARGET_DIR + "log.txt"
+def get_log_path():
+    return _config['LOG_PATH']
