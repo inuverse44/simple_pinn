@@ -104,7 +104,7 @@ class PINN():
             optimizer.zero_grad()
 
             if epoch % EPOCH_SEPARATOR == 0:
-                print(f'epoch:{epoch}, loss:{loss_total.item()}, loss_u:{loss_u.item()}, loss_v:{loss_v if isinstance(loss_v, float) else loss_v.item()}, loss_pi:{loss_pi.item()}')
+                print(f'epoch:{epoch}, \tloss:{loss_total.item()}, \tloss_u:{loss_u.item()}, \tloss_v:{loss_v if isinstance(loss_v, float) else loss_v.item()}, \tloss_pi:{loss_pi.item()}')
                 history.append([epoch, loss_total.item(), loss_u.item(), loss_v.item(), loss_pi.item()])
             
         return np.array(history)
