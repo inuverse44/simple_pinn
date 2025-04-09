@@ -16,7 +16,6 @@ def main_PINN():
     # POSTPROCESSING (visualization, save data, etc.)
     postprocesses.postprocess(pinn_model, history)
     
-    
     end_time = time.time()
     from simple_PINN.settings.config import LOG_PATH
     print(f"Execution time: {end_time - start_time:.2f} seconds")
