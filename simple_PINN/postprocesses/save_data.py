@@ -1,5 +1,5 @@
 import numpy as np
-from simple_PINN.settings.config import TARGET_DIR
+from simple_PINN.settings.config import get_target_dir
 
 def save_data(t_grid, x_grid, u_pred, f_pred, history):
     """
@@ -11,6 +11,7 @@ def save_data(t_grid, x_grid, u_pred, f_pred, history):
     :param history: 学習履歴
     """
     # メッシュグリッド t, x（1次元配列）
+    TARGET_DIR = get_target_dir()
     np.savetxt(TARGET_DIR + "t_grid.dat", t_grid.flatten(), delimiter=",")
     np.savetxt(TARGET_DIR + "x_grid.dat", x_grid.flatten(), delimiter=",")
 

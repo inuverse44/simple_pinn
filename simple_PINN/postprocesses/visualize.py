@@ -5,8 +5,9 @@ from simple_PINN.settings.config import (
     t_initial, x_initial, u_initial, v_initial, 
     t_boundary, x_boundary, u_boundary,
     t_region, x_region, 
-    TARGET_DIR
+    get_target_dir
 )
+TARGET_DIR = get_target_dir()
 
 def sampling_points():
     """

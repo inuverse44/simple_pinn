@@ -1,4 +1,8 @@
+# scientific analysis
 numpy
 torch
 matplotlib
 scipy
+
+# config
+pyyaml

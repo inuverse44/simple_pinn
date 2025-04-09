@@ -1,13 +1,13 @@
 import os
 
 from simple_PINN.settings.config import ( 
-    TARGET_DIR, LOG_PATH, 
+    get_target_dir, get_log_path,
     N_INITIAL, N_BOUNDARY, N_REGION,
     LEARNING_RATE, PI_WEIGHT, VELOCITY,
     MAX_EPOCHS_FOR_MODEL, MAX_EPOCHS_FOR_FITTING
 )
 
-def save_config(save_path=LOG_PATH):
+def save_config(save_path=get_log_path()):
     """
     設定を保存
     @param save_path: 保存先のパス

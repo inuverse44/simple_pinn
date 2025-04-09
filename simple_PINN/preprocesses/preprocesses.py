@@ -1,6 +1,6 @@
 import os
 from simple_PINN.settings.config import ( 
-    TARGET_DIR, LOG_PATH
+    get_target_dir, get_log_path
 )
 from simple_PINN.settings import save_config
 from simple_PINN.preprocesses import initialize
@@ -15,8 +15,8 @@ def preprocesses():
     initialize.delete_log()
 
     # setting path
-    os.makedirs(TARGET_DIR, exist_ok=True)
+    os.makedirs(get_target_dir(), exist_ok=True)
     # save config
-    save_config.save_config(LOG_PATH)
+    save_config.save_config(get_log_path())
     # fix random seed
     seed.torch_fix_seed()

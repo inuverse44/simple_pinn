@@ -1,0 +1,18 @@
+configs:
+  - name: default
+    N_INITIAL: 100
+    N_BOUNDARY: 100
+    N_REGION: 5000
+    MAX_EPOCHS_FOR_MODEL: 1000
+    LEARNING_RATE: 0.01
+    PI_WEIGHT: 0.1
+    VELOCITY: 1
+
+  - name: fine_grid
+    N_INITIAL: 200
+    N_BOUNDARY: 200
+    N_REGION: 10000
+    MAX_EPOCHS_FOR_MODEL: 2000
+    LEARNING_RATE: 0.001
+    PI_WEIGHT: 0.01
+    VELOCITY: 1
