@@ -1,29 +1,31 @@
 import os
 import numpy as np
-from simple_PINN.training.NN import NN
-from simple_PINN.training.PINN import PINN
-from simple_PINN.preprocesses import torch_fix_seed
+
 from simple_PINN.settings import ( 
     t_initial, x_initial, u_initial, v_initial, 
     t_boundary, x_boundary, u_boundary,
     t_region, x_region, 
-    TARGET_DIR
+    TARGET_DIR, MAX_EPOCHS_FOR_MODEL
 )
-from simple_PINN.settings import MAX_EPOCHS_FOR_MODEL
-from simple_PINN.postprocesses import visualize
-from simple_PINN.postprocesses import save_data
+from simple_PINN.preprocesses import seed
+from simple_PINN.training.NN import NN
+from simple_PINN.training.PINN import PINN
+from simple_PINN.postprocess import visualize
+from simple_PINN.postprocess import save_data
+from simple_PINN.postprocess import evaluate_error
 
 def main_PINN():
     ###############
-    # 問題設定
+    # SETTINGS
     ###############
-    # パスの設定
+
+    # setting path
     os.makedirs(TARGET_DIR, exist_ok=True)
 
-    # 乱数のシードを固定
-    torch_fix_seed()
+    # fix random seed
+    seed.torch_fix_seed()
 
-    # 学習用のデータ
+    # data for training
     # 注意：初期条件（t=0）と境界条件（t∈[0,1]）を合成してX_bcにしているため、tやuも「初期条件+境界条件=200個」になっている
     X_bc = np.block([[t_initial, t_boundary], [x_initial, x_boundary]]).T #x軸のboundary condition
     Y_bc = np.block([[u_initial, u_boundary]]).T #y軸のboundary condition
@@ -31,35 +33,41 @@ def main_PINN():
     X_region = np.block([[t_region], [x_region]]).T 
 
     ###############
-    # 学習
+    # TRAINING
     ###############
     model = NN(2, 1)
     pinn_model = PINN(model)
 
-    # モデルを学習
+    # the model is trained with the boundary condition
     history = pinn_model.fit(X_bc, Y_bc, X_region, v_ic=V_ic, max_epochs=MAX_EPOCHS_FOR_MODEL)
 
-    # 予測したいポイント
+    # prediction
     n = 100
     t_pred = np.linspace(0, 1, n) # t=[0, 0.01, ..., 1]
     x_pred = np.linspace(-1, 1, n) # x=[-1, -0.98, ..., 1] predはpredictionの略
     t_grid, x_grid = np.meshgrid(t_pred, x_pred) # tとxのメッシュグリッドを作成
     X_in = np.block([[t_grid.flatten()], [x_grid.flatten()]]).T # tとxを結合
 
-    # 予測 (prediction)
+    # prediction
     u_pred, f_pred = pinn_model.predict(X_in)
     u_pred = u_pred.reshape(n, n)
     f_pred = f_pred.reshape(n, n)
 
+    ###############
+    # Evaluation
+    ###############
 
-    ###############
-    # データの保存
-    ###############
+    u_exact = np.sin(np.pi * x_grid) * np.cos(np.pi * t_grid)
+    # exact solution
+    print("u_exact shape:", u_exact.shape)
+    print("u_pred  shape:", u_pred.shape)
+    print("max diff in values:", np.max(np.abs(u_exact - u_pred)))
+    metrics_path = os.path.join(TARGET_DIR, "metrics.txt")
+    evaluate_error.evaluate_error(u_exact, u_pred, x_grid, t_grid, save_path=metrics_path)
+
+    # save the prediction data
     save_data.save_data(t_grid, x_grid, u_pred, f_pred, history)
-
-    ###############
-    # 図示
-    ###############
+    # visualize the prediction
     visualize.plot_figures(pinn_model, history, t_pred, x_pred, u_pred, f_pred)
 
   

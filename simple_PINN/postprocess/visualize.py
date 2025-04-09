@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.integrate import simpson
 from simple_PINN.settings import (
     t_initial, x_initial, u_initial, v_initial, 
     t_boundary, x_boundary, u_boundary,
@@ -102,24 +103,67 @@ def time_evolution(pinn_model, x_pred):
     物理量の時間変化を可視化
     """
     times = [0, 0.25, 0.5, 0.75, 1.0]
-    fig = plt.figure(figsize=(15, 2))
+    fig, axes = plt.subplots(1, len(times), figsize=(15, 2), sharey=True)
 
     for i, t in enumerate(times):
         t_pred = np.ones([100, 1]) * t
         X_in = np.column_stack([t_pred, x_pred])
         u_pred, f_pred = pinn_model.predict(X_in)
-        
-        fig.add_subplot(1, len(times), i+1)    
-        plt.plot(x_pred, u_pred, label='u_pred')
-        plt.plot(x_pred, f_pred, label='f_pred')
-        plt.ylim(-1.5, 1.5)
-        plt.legend()
+        u_exact = np.sin(np.pi * x_pred.flatten()) * np.cos(np.pi * t)
 
+        ax = axes[i]
+        ax.plot(x_pred, u_exact, label=r'$u_{\rm exact}$', linewidth=1, linestyle='dashed', color='black')
+        ax.plot(x_pred, u_pred, label=r'$u_{\rm pred}$', linewidth=0.5)
+        ax.plot(x_pred, f_pred, label=r'$f_{\rm pred}$', linewidth=0.5)
+        ax.set_ylim(-1.5, 1.5)
+        ax.set_title(f"t = {t:.2f}")
+
+        if i == 0:
+            ax.set_ylabel("u")
+
+    # 共通の凡例を下部に追加
+    lines, labels = axes[0].get_legend_handles_labels()
+    fig.legend(lines, labels, loc='lower center', ncol=3, bbox_to_anchor=(0.5, -0.15))
+
+    fig.tight_layout()
     path = TARGET_DIR + "time_evolution.pdf"
-    plt.savefig(path, bbox_inches='tight')  # 画像保存
+    plt.savefig(path, bbox_inches='tight')
 
-    #plt.show()
+import matplotlib.pyplot as plt
+import numpy as np
+from simple_PINN.settings import TARGET_DIR
 
+def difference(pinn_model, x_pred):
+    """
+    物理量の時間変化における u_exact - u_pred の差分を可視化
+    """
+    times = [0, 0.25, 0.5, 0.75, 1.0]
+    fig, axes = plt.subplots(1, len(times), figsize=(15, 2), sharey=True)
+
+    for i, t in enumerate(times):
+        t_pred = np.ones([100, 1]) * t
+        X_in = np.column_stack([t_pred, x_pred])
+        u_pred, _ = pinn_model.predict(X_in)
+        u_exact = np.sin(np.pi * x_pred.flatten()) * np.cos(np.pi * t)
+        diff_u = u_pred.flatten() - u_exact
+        diff_u2 = - diff_u
+        ax = axes[i]
+        ax.plot(x_pred, diff_u, label=r'$u_{\rm exact} - u_{\rm pred}$',
+                linewidth=1, linestyle='solid', color='black')
+        ax.plot(x_pred, diff_u2, linewidth=1, linestyle='dashed', color='black')
+        ax.set_ylim(0, 1.5)
+        ax.set_title(f"t = {t:.2f}")
+
+        if i == 0:
+            ax.set_ylabel("difference")
+
+    # 共通の凡例を下部に表示
+    lines, labels = axes[0].get_legend_handles_labels()
+    fig.legend(lines, labels, loc='lower center', ncol=1, bbox_to_anchor=(0.5, -0.15))
+
+    fig.tight_layout()
+    path = TARGET_DIR + "difference.pdf"
+    plt.savefig(path, bbox_inches='tight')
 
 
 def plot_figures(pinn_model, history, t_pred, x_pred, u_pred, f_pred):
@@ -138,3 +182,6 @@ def plot_figures(pinn_model, history, t_pred, x_pred, u_pred, f_pred):
     residual(t_pred, x_pred, f_pred)
     # 物理量の時間変化を可視化
     time_evolution(pinn_model, x_pred)
+    # 物理量の時間変化とexact solutionの差を可視化
+    difference(pinn_model, x_pred)
+    
