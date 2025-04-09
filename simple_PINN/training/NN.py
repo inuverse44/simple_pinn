@@ -2,18 +2,6 @@ import torch.nn as nn
 
 class NN(nn.Module):
     def __init__(self, n_input, n_output, n_hiddens=[32,64,128,64,32]):
-        """ ニューラルネットワークの定義
-
-        このクラスは、Burgers方程式のPINNモデルを定義します。
-
-        :param n_input: 入力の次元数
-        :type n_input: int
-        :param n_output: 出力の次元数
-        :type n_output: int
-        :param n_hiddens: 隠れ層の数と次元数
-        :type n_hiddens: list
-        """
-
         # 親クラスの初期化
         # nn.Moduleを継承しているため、親クラスの初期化が必要
         super(NN, self).__init__() 
