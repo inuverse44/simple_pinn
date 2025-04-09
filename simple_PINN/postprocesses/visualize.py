@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import simpson
-from simple_PINN.settings import (
+from simple_PINN.settings.config import (
     t_initial, x_initial, u_initial, v_initial, 
     t_boundary, x_boundary, u_boundary,
     t_region, x_region, 
@@ -131,7 +131,7 @@ def time_evolution(pinn_model, x_pred):
 
 import matplotlib.pyplot as plt
 import numpy as np
-from simple_PINN.settings import TARGET_DIR
+from simple_PINN.settings.config import TARGET_DIR
 
 def difference(pinn_model, x_pred):
     """

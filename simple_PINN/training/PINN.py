@@ -1,7 +1,7 @@
 
 import numpy as np
 import torch
-from simple_PINN.settings import (
+from simple_PINN.settings.config import (
     MAX_EPOCHS_FOR_FITTING,
     LEARNING_RATE, 
     PI_WEIGHT,

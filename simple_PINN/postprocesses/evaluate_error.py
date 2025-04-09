@@ -25,10 +25,11 @@ def evaluate_error(u_exact, u_pred, x_grid, t_grid, save_path=None):
 
     if save_path is not None:
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        with open(save_path, "w") as f:
+        with open(save_path, "a") as f:
             f.write("=== Evaluation Metrics ===\n")
             f.write(f"L1 norm    : {l1_error:.5e}\n")
             f.write(f"L2 norm    : {l2_error:.5e}\n")
             f.write(f"Max error  : {linf_error:.5e}\n")
+            f.write("\n")
 
     return l1_error, l2_error, linf_error

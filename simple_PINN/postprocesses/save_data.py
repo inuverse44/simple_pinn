@@ -1,5 +1,5 @@
 import numpy as np
-from simple_PINN.settings import TARGET_DIR
+from simple_PINN.settings.config import TARGET_DIR
 
 def save_data(t_grid, x_grid, u_pred, f_pred, history):
     """
