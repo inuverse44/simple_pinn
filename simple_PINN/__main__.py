@@ -1,7 +1,7 @@
 # __main__.py
 import time
 from simple_PINN.simple_PINN import main_PINN
-from simple_PINN.settings.cofig_loader import load_configs
+from simple_PINN.settings.config_loader import load_configs
 from simple_PINN.settings.config import apply_config
 
 if __name__ == '__main__':
