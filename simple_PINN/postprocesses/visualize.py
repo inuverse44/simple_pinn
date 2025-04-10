@@ -1,11 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import simpson
-from simple_PINN.settings import config  # 関数ベースの設定取得
+from simple_PINN.settings import config
 
 def sampling_points():
     """
-    サンプリングした点を可視化
+    Visualize sampling points for initial, boundary, and collocation conditions.
+
+    Returns:
+        None
     """
     t_initial = config.get("t_initial")
     x_initial = config.get("x_initial")
@@ -32,7 +35,10 @@ def sampling_points():
 
 def initial_conditions():
     """
-    初期条件を可視化
+    Visualize the initial condition u(x, 0).
+
+    Returns:
+        None
     """
     x_initial = config.get("x_initial")
     u_initial = config.get("u_initial")
@@ -50,7 +56,13 @@ def initial_conditions():
 
 def loss(history):
     """
-    lossの履歴を可視化
+    Visualize loss history during training.
+
+    Parameters:
+        history (ndarray): Training loss history [epoch, loss_total, loss_u, loss_v, loss_pi]
+
+    Returns:
+        None
     """
     plt.figure(figsize=(10, 2))
     plt.plot(history[:, 0], history[:, 1], label='loss_total')
@@ -70,7 +82,15 @@ def loss(history):
 
 def prediction(t_pred, x_pred, u_pred):
     """
-    予測した物理量を可視化
+    Visualize predicted solution u(t, x).
+
+    Parameters:
+        t_pred (ndarray): 1D array of time points.
+        x_pred (ndarray): 1D array of spatial points.
+        u_pred (ndarray): 2D predicted solution grid.
+
+    Returns:
+        None
     """
     plt.figure(figsize=(10, 2))
     plt.contourf(t_pred, x_pred, u_pred, 32)
@@ -78,7 +98,7 @@ def prediction(t_pred, x_pred, u_pred):
 
     plt.xlabel(r'$t$')
     plt.ylabel(r'$x$')
-    plt.title(r'predicted $u(t, x)$')
+    plt.title(r'Predicted $u(t, x)$')
 
     path = config.get_target_dir() + "prediction.pdf"
     plt.savefig(path, bbox_inches='tight')
@@ -86,7 +106,15 @@ def prediction(t_pred, x_pred, u_pred):
 
 def residual(t_pred, x_pred, f_pred):
     """
-    基礎方程式の残差を可視化
+    Visualize the residual f(t, x) from the governing equation.
+
+    Parameters:
+        t_pred (ndarray): 1D array of time points.
+        x_pred (ndarray): 1D array of spatial points.
+        f_pred (ndarray): 2D residual grid.
+
+    Returns:
+        None
     """
     plt.figure(figsize=(10, 2))
     plt.contourf(t_pred, x_pred, f_pred, 32)
@@ -94,7 +122,7 @@ def residual(t_pred, x_pred, f_pred):
 
     plt.xlabel(r'$t$')
     plt.ylabel(r'$x$')
-    plt.title(r'residual $f(t, x)$')
+    plt.title(r'Residual $f(t, x)$')
 
     path = config.get_target_dir() + "residual.pdf"
     plt.savefig(path, bbox_inches='tight')
@@ -102,7 +130,14 @@ def residual(t_pred, x_pred, f_pred):
 
 def time_evolution(pinn_model, x_pred):
     """
-    物理量の時間変化を可視化
+    Plot time evolution of u(x, t) and f(x, t) at selected time snapshots.
+
+    Parameters:
+        pinn_model (PINN): Trained PINN model.
+        x_pred (ndarray): 1D array of spatial points.
+
+    Returns:
+        None
     """
     times = [0, 0.25, 0.5, 0.75, 1.0]
     fig, axes = plt.subplots(1, len(times), figsize=(15, 2), sharey=True)
@@ -133,7 +168,14 @@ def time_evolution(pinn_model, x_pred):
 
 def difference(pinn_model, x_pred):
     """
-    u_exact - u_pred の差分を可視化
+    Visualize the difference u_exact - u_pred over time.
+
+    Parameters:
+        pinn_model (PINN): Trained PINN model.
+        x_pred (ndarray): 1D array of spatial points.
+
+    Returns:
+        None
     """
     times = [0, 0.25, 0.5, 0.75, 1.0]
     fig, axes = plt.subplots(1, len(times), figsize=(15, 2), sharey=True)
@@ -166,7 +208,18 @@ def difference(pinn_model, x_pred):
 
 def plot_figures(pinn_model, history, t_pred, x_pred, u_pred, f_pred):
     """
-    すべての図を描画
+    Generate and save all relevant figures.
+
+    Parameters:
+        pinn_model (PINN): Trained PINN model.
+        history (ndarray): Training loss history.
+        t_pred (ndarray): 1D array of time points.
+        x_pred (ndarray): 1D array of spatial points.
+        u_pred (ndarray): 2D predicted solution.
+        f_pred (ndarray): 2D residual.
+
+    Returns:
+        None
     """
     sampling_points()
     initial_conditions()
