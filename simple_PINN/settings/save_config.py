@@ -3,14 +3,23 @@ from simple_PINN.settings import config
 
 def save_config(save_path=None):
     """
-    設定を保存
-    @param save_path: 保存先のパス（省略時は現在の設定の LOG_PATH）
+    Save the current experiment configuration to a log file.
+
+    The function writes all key hyperparameters and dataset sizes
+    into the specified log file. If no path is provided, the default
+    path from config.get_log_path() is used.
+
+    Parameters:
+        save_path (str, optional): Path to the log file. Defaults to config.get_log_path().
+
+    Returns:
+        None
     """
     if save_path is None:
         save_path = config.get_log_path()
 
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    
+
     with open(save_path, "a") as f:
         f.write("=== Settings ===\n")
         f.write(f"Initial points  : {config.get('N_INITIAL')}\n")

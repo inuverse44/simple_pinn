@@ -6,16 +6,25 @@ from simple_PINN.preprocesses import seed
 
 def preprocesses():
     """
-    Preprocesses the data.
+    Perform preprocessing before training the PINN model.
+
+    This function handles:
+    - Deleting or initializing the log file
+    - Creating the output directory
+    - Saving the current configuration to file
+    - Fixing random seeds for reproducibility
+
+    Returns:
+        None
     """
-    # delete log file
+    # Clear previous log file
     initialize.delete_log()
 
-    # setting path
+    # Ensure output directory exists
     os.makedirs(config.get_target_dir(), exist_ok=True)
 
-    # save config
+    # Save current configuration to log
     save_config.save_config()
 
-    # fix random seed
+    # Fix random seed for reproducibility
     seed.torch_fix_seed()
