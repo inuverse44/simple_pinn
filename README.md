@@ -3,14 +3,20 @@
 This project implements a **Physics-Informed Neural Network (PINN)** to solve the 1D wave equation:
 
 $$
-\frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2}
+\begin{align}
+    \frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2}
+\end{align}
 $$
 
 with boundary and initial conditions:
 
-- $ u(x, 0) = \sin(\pi x) $
-- $ \frac{\partial u}{\partial t}(x, 0) = 0 $
-- $ u(-1, t) = u(1, t) = 0 $
+$$
+\begin{align}
+    u(x, 0) &= \sin(\pi x) \\
+    \frac{\partial u}{\partial t}(x, 0) &= 0 \\
+    u(-1, t) = u(1, t) &= 0
+\end{align}
+$$
 
 --- 
 
