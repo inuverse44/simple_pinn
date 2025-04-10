@@ -1,34 +1,76 @@
 import numpy as np
 
-# --- 初期条件 ---
-N_INITIAL = 100
-t_initial = np.zeros(N_INITIAL)  # t = 0
-x_initial = np.linspace(-1, 1, N_INITIAL)
-u_initial = np.sin(np.pi * x_initial) # 変位 u(x, 0) = sin(pi * x)
-v_initial = np.zeros_like(x_initial) # 速度 ∂u/∂t(x, 0) = 0（静止）
+# Global configuration dictionary (populated via apply_config)
+_config = {}
 
-N_BOUNDARY = 100
-t_boundary = np.random.rand(N_BOUNDARY)
-x_boundary = np.random.choice([-1, 1], N_BOUNDARY)
-u_boundary = np.zeros(N_BOUNDARY) # 固定端
+def apply_config(cfg):
+    """
+    Apply a configuration dictionary and generate additional derived parameters.
 
-N_REGION = 5000
-t_region = np.random.rand(N_REGION)
-x_region = np.random.uniform(-1, 1, N_REGION)
+    This function:
+    - Copies user-defined values from the config dictionary
+    - Computes sampling points (initial, boundary, interior)
+    - Constructs output and log paths based on parameter values
+
+    Parameters:
+        cfg (dict): Configuration dictionary from YAML.
+
+    Returns:
+        None
+    """
+    global _config
+    _config = cfg.copy()
+
+    # Initial condition points (t = 0)
+    _config['t_initial'] = np.zeros(cfg['N_INITIAL'])
+    _config['x_initial'] = np.linspace(-1, 1, cfg['N_INITIAL'])
+    _config['u_initial'] = np.sin(np.pi * _config['x_initial'])
+    _config['v_initial'] = np.zeros_like(_config['x_initial'])
+
+    # Boundary condition points (x = ±1)
+    _config['t_boundary'] = np.random.rand(cfg['N_BOUNDARY'])
+    _config['x_boundary'] = np.random.choice([-1, 1], cfg['N_BOUNDARY'])
+    _config['u_boundary'] = np.zeros(cfg['N_BOUNDARY'])
+
+    # Collocation (interior) points
+    _config['t_region'] = np.random.rand(cfg['N_REGION'])
+    _config['x_region'] = np.random.uniform(-1, 1, cfg['N_REGION'])
+
+    # Output and logging paths
+    _config['OUTPUT_DIR'] = "output/"
+    _config['TARGET_DIR'] = _config['OUTPUT_DIR'] + \
+        f"init={cfg['N_INITIAL']}_boun={cfg['N_BOUNDARY']}_regi={cfg['N_REGION']}_maxep={cfg['MAX_EPOCHS_FOR_MODEL']}_lr={cfg['LEARNING_RATE']}_w={cfg['PI_WEIGHT']}_v={cfg['VELOCITY']}/"
+    _config['LOG_PATH'] = _config['TARGET_DIR'] + "log.txt"
 
 
-# --- HYPER PARAMETERS ---
-MAX_EPOCHS_FOR_MODEL = 1000
-MAX_EPOCHS_FOR_FITTING = 1000
-LEARNING_RATE = 0.01
-PI_WEIGHT = 1e-1
-VELOCITY = 1
+def get(key):
+    """
+    Retrieve a value from the global configuration dictionary.
 
-# --- その他の設定 ---
-EPOCH_SEPARATOR = 10
+    Parameters:
+        key (str): Key to retrieve.
 
-# --- outputディレクトリパス ---
-OUTPUT_DIR = "output/"
-TARGET_DIR = OUTPUT_DIR + \
-      f"init={N_INITIAL}_boun={N_BOUNDARY}_regi={N_REGION}_maxep={MAX_EPOCHS_FOR_MODEL}_lr={LEARNING_RATE}_w={PI_WEIGHT}_v={VELOCITY}/"
-LOG_PATH = TARGET_DIR + "log.txt"
+    Returns:
+        Any: Corresponding value.
+    """
+    return _config[key]
+
+
+def get_target_dir():
+    """
+    Return the output directory path for saving experiment results.
+
+    Returns:
+        str: Output directory path.
+    """
+    return _config['TARGET_DIR']
+
+
+def get_log_path():
+    """
+    Return the path to the log file.
+
+    Returns:
+        str: Log file path.
+    """
+    return _config['LOG_PATH']
