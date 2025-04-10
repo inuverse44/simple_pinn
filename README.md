@@ -3,7 +3,7 @@
 This project implements a **Physics-Informed Neural Network (PINN)** to solve the 1D wave equation:
 
 $$
-    \frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2}
+\frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2}
 $$
 
 with boundary and initial conditions:
@@ -12,7 +12,7 @@ with boundary and initial conditions:
 - $ \frac{\partial u}{\partial t}(x, 0) = 0 $
 - $ u(-1, t) = u(1, t) = 0 $
 
----
+--- 
 
 ## 📁 Directory Structure
 
@@ -39,7 +39,7 @@ with boundary and initial conditions:
     │   └── seed.py
     ├── settings
     │   ├── __init__.py
-    │   ├── cofig_loader.py
+    │   ├── config_loader.py
     │   ├── config.py
     │   └── save_config.py
     ├── simple_PINN.py
@@ -49,6 +49,7 @@ with boundary and initial conditions:
         ├── __init__.py
         └── training.py
 ```
+
 
 
 ---
@@ -64,56 +65,82 @@ pip install -r requirements.txt
 ```
 ## 🚀 Run a Single or Multiple Configs
 
+### ▶ Run a Single Configuration Manually
+```
 from simple_PINN.settings.config import apply_config
-apply_config({ ... })
+from simple_PINN.simple_PINN import main_PINN
+
+apply_config({
+    "N_INITIAL": 100,
+    "N_BOUNDARY": 100,
+    "N_REGION": 5000,
+    "MAX_EPOCHS_FOR_MODEL": 1000,
+    "LEARNING_RATE": 0.001,
+    "PI_WEIGHT": 0.01,
+    "VELOCITY": 1,
+    "EPOCH_SEPARATOR": 10
+})
 main_PINN()
-▶ Batch Run from YAML
+```
+
+### ▶ Batch Run from config.yaml
 Define multiple settings in config.yaml:
 
 ```yaml
 configs:
   - name: exp1
+    N_INITIAL: 100
+    N_BOUNDARY: 100
+    N_REGION: 5000
     MAX_EPOCHS_FOR_MODEL: 100
     LEARNING_RATE: 0.001
     PI_WEIGHT: 0.01
-    ...
+    VELOCITY: 1
+    EPOCH_SEPARATOR: 10
+
   - name: exp2
     ...
-```
-Run all:
 
+```
+Then, run:
+```
 python -m simple_PINN
-📊 Outputs
+```
+
+## 📊 Outputs
 Each run creates a unique folder in output/, e.g.:
 
 ```
 output/init=100_boun=100_regi=5000_maxep=100_lr=0.001_w=0.01_v=1/
-├── prediction.pdf
-├── loss_history.pdf
-├── difference.pdf
-├── residual.pdf
-├── ...
-├── log.txt
-
+├── prediction.pdf         # u(t, x) prediction heatmap
+├── loss_history.pdf       # loss curves (total, u, v, residual)
+├── difference.pdf         # difference between predicted and exact solution
+├── residual.pdf           # PDE residual visualization
+├── t_grid.dat, x_grid.dat
+├── u_pred.dat, f_pred.dat
+├── loss_history.dat
+├── log.txt                # settings and error metrics
 ```
 
 ## 🧪 Features
-Supports multiple training runs via config.yaml
+✅ Multiple training runs via config.yaml
+✅ L1 / L2 / max error norm logging
+✅ Training history and prediction vs. exact visualizations
+✅ Modular and extensible codebase
+✅ Reproducible experiment management
 
-Logs L1/L2/max error norms
-
-Outputs training history and prediction vs exact plots
-
-Modular codebase with clear separation
 
 ## 📌 Requirements
-Python ≥ 3.8
-
-numpy, matplotlib, torch, scipy, PyYAML
+- Python ≥ 3.8
+- Dependencies:
+    - numpy
+    - matplotlib
+    - torch
+    - scipy
+    - PyYAML
 
 Install with:
-
-```bash
+```
 pip install -r requirements.txt
 ```
 
