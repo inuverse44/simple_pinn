@@ -12,4 +12,4 @@ if __name__ == '__main__':
         apply_config(config)
         main_PINN()
     end_time = time.time()
-    print(f"Execution time: (hours:minutes:seconds) {time.strftime('%H:%M:%S', time.gmtime(end_time - start_time))}")
+    print(f"Total Execution time: (hours:minutes:seconds) {time.strftime('%H:%M:%S', time.gmtime(end_time - start_time))}")
