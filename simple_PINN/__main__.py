@@ -6,7 +6,7 @@ from simple_PINN.settings.config import apply_config
 
 if __name__ == '__main__':
     start_time = time.time()
-    configs = load_configs("config.yaml")
+    configs = load_configs("todo.yaml")
     for config in configs:
         print(f"\n===== Running config: {config['name']} =====")
         apply_config(config)
