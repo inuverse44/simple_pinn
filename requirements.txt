@@ -2,5 +2,7 @@ numpy
 torch
 matplotlib
 scipy
+pandas
+seaborn
 
-yaml
+pyyaml
