@@ -64,7 +64,7 @@ $$
 
 ```bash
 git clone https://github.com/yourname/pinn-wave.git
-cd pinn-wave
+cd simple_PINN
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -108,13 +108,15 @@ configs:
     ...
 
 ```
+
 Then, run:
+
 ```
 python -m simple_PINN
 ```
 
 ## 📊 Outputs
-Each run creates a unique folder in output/, e.g.:
+Each run creates a unique folder in `output/`, *e.g.*:
 
 ```
 output/init=100_boun=100_regi=5000_maxep=100_lr=0.001_w=0.01_v=1/
@@ -129,11 +131,11 @@ output/init=100_boun=100_regi=5000_maxep=100_lr=0.001_w=0.01_v=1/
 ```
 
 ## 🧪 Features
-✅ Multiple training runs via config.yaml
-✅ L1 / L2 / max error norm logging
-✅ Training history and prediction vs. exact visualizations
-✅ Modular and extensible codebase
-✅ Reproducible experiment management
+✅ Multiple training runs via config.yaml  
+✅ $L_1$ / $L_2$ / max error norm logging  
+✅ Training history and prediction vs. exact visualizations  
+✅ Modular and extensible codebase  
+✅ Reproducible experiment management  
 
 
 ## 📌 Requirements
@@ -146,6 +148,7 @@ output/init=100_boun=100_regi=5000_maxep=100_lr=0.001_w=0.01_v=1/
     - PyYAML
 
 Install with:
+
 ```
 pip install -r requirements.txt
 ```
